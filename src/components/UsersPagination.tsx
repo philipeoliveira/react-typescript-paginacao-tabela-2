@@ -19,6 +19,11 @@ export function UsersPagination() {
       handlePagination,
    } = usePagination(data);
 
+   const currentItems = data.slice(
+      (currentPage - 1) * limitPerPage,
+      currentPage * limitPerPage
+   );
+
    return (
       <>
          <Table>
@@ -31,27 +36,23 @@ export function UsersPagination() {
                </TableRow>
             </thead>
             <tbody>
-               {data
-                  .slice((currentPage - 1) * limitPerPage, currentPage * limitPerPage)
-                  .map((item) => {
-                     return (
-                        <TableRow key={item.id}>
-                           <TableCell>{item.id}</TableCell>
-                           <TableCell>{item.firstName}</TableCell>
-                           <TableCell>{item.lastName}</TableCell>
-                           <TableCell otherClasses='max-sm:hidden'>
-                              {item.email}
-                           </TableCell>
-                        </TableRow>
-                     );
-                  })}
+               {currentItems.map((item) => {
+                  return (
+                     <TableRow key={item.id}>
+                        <TableCell>{item.id}</TableCell>
+                        <TableCell>{item.firstName}</TableCell>
+                        <TableCell>{item.lastName}</TableCell>
+                        <TableCell otherClasses='max-sm:hidden'>{item.email}</TableCell>
+                     </TableRow>
+                  );
+               })}
             </tbody>
             <tfoot>
                <tr>
                   <TableCell colSpan={4} otherClasses='text-sm'>
                      <div className='flex justify-between gap-4 py-3'>
                         <span>
-                           {limitPerPage} de {data.length} itens
+                           {currentItems.length} de {data.length} itens
                         </span>
                         <span>
                            Página {currentPage} de {totalPages}
